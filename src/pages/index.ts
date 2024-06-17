@@ -1,5 +1,5 @@
-import Main from "./Main";
+import HomePage from "./HomePage";
 import NotFound from "./NotFound";
 import Layout from "./layouts/Layout";
 
-export { Layout, NotFound, Main };
+export { Layout, NotFound, HomePage };

@@ -1,10 +1,10 @@
 
-const Main = () => {
+const HomePage = () => {
   return (
     <div className="mx-auto w-[300px] flex justify-center items-center gap-4">
-      Main
+      Home Page
     </div>
   );
 };
 
-export default Main;
+export default HomePage;
