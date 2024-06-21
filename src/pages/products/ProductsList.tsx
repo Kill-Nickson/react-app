@@ -64,7 +64,11 @@ const ProductsList = () => {
                     },
                 }}
                 pageSizeOptions={[5, 10]}
-                checkboxSelection
+                checkboxSelection={false}
+                disableColumnMenu
+                disableColumnResize
+                disableColumnFilter
+                disableColumnSorting
             />
         </div>
     );
