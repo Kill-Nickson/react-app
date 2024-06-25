@@ -4,7 +4,7 @@ import Footer from "@components/Footer";
 import Sidebar from '@components/Sidebar';
 import { Outlet } from 'react-router-dom';
 
-const Layout = () => {
+const MainLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   const toggleSidebar = () => {
@@ -24,4 +24,4 @@ const Layout = () => {
   );
 };
 
-export default Layout;
+export default MainLayout;

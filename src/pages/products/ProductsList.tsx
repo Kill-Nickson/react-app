@@ -19,7 +19,7 @@ const columns: GridColDef[] = [
         description: 'This column has a value getter and is not sortable.',
         sortable: false,
         width: 160,
-        valueGetter: (value, row) => `${row.firstName || ''} ${row.lastName || ''}`,
+        valueGetter: (_, row) => `${row.firstName || ''} ${row.lastName || ''}`,
     },
     {
         field: "actions",
@@ -31,7 +31,7 @@ const columns: GridColDef[] = [
         renderCell: (params: GridRenderCellParams) => {
             const productId = params.row.id;
             return (
-                <Link to={`${ROUTE.PRODUCTS_LIST}/${productId}`} replace>
+                <Link to={ ROUTE.PRODUCT_EDIT.replace(`:id`, productId) }>
                     <Button variant="outlined" color="success">Edit</Button>
                 </Link>
             );

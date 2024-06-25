@@ -1,5 +1,12 @@
 import HomePage from "./HomePage";
 import NotFound from "./NotFound";
-import Layout from "./layouts/Layout";
+import MainLayout from "./layouts/MainLayout";
+import AuthLayout from "./layouts/AuthLayout";
+import AuthRedirect from "@/hocs/AuthRedirect";
+import AuthPrivate from "@/hocs/AuthPrivate";
 
-export { Layout, NotFound, HomePage };
+
+const ProtectedAuthLayout = AuthRedirect(AuthLayout);
+const ProtectedMainLayout = AuthPrivate(MainLayout);
+
+export { ProtectedMainLayout, ProtectedAuthLayout, NotFound, HomePage };

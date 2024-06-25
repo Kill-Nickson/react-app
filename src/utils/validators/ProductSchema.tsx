@@ -25,8 +25,8 @@ export type ProductFormValues = yup.InferType<typeof ProductSchema>;
 
 export const productInitialValues: ProductFormValues = {
     name: '',
-    // quantity: '',
-    // category: '',
+    quantity: '',
+    category: '',
     // barcode: '',
     // description: '',
     // ingredients: '',

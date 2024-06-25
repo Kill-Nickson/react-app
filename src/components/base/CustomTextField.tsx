@@ -32,7 +32,7 @@ const CustomTextField = ({ className, rounded, ...props }: Props) => {
             WebkitBoxShadow: '0 0 0 1000px #151c36 inset',
             WebkitTextFillColor: '#fff',
           },
-          color: 'black', // Set entered text color to black
+          color: 'black',
           paddingY: 0.5,
           opacity: 0.9,
           '&::placeholder': {

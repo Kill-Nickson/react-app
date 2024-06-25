@@ -4,16 +4,27 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
+import MenuIcon from '@mui/icons-material/Menu'
+import { persistor } from '@store';
+import { useNavigate } from 'react-router-dom';
+import ROUTE from '@utils/enums';
 
 type Props = {
   toggleSidebar: () => void;
 };
 
 const Header = ({ toggleSidebar }: Props) => {
+  const navigate = useNavigate();
+
   const handleToggleSidebar = () => {
     toggleSidebar();
   };
+  
+  const logout = async () => {
+    await persistor.purge();
+    navigate(ROUTE.AUTH_LOGIN);
+  };
+
 
   return (
     <header className="w-full">
@@ -33,7 +44,7 @@ const Header = ({ toggleSidebar }: Props) => {
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               ReactApp
             </Typography>
-            <Button color="inherit">Login</Button>
+            <Button onClick={logout} color="inherit">Logout</Button>
           </Toolbar>
         </AppBar>
       </Box>

@@ -5,22 +5,21 @@ import { FormikProps } from "formik";
 
 interface Props extends StandardTextFieldProps {
     formik: FormikProps<ProductFormValues>;
-};
+}
 
-
-const ProductNameInput = ( { formik, ...props }: Props ) => {
+const ProductNameInput = ({ formik, ...props }: Props) => {
     return (
         <CustomTextField
             name='name'
             label={'Name'}
-            value={ formik.values.name }
+            value={formik.values.name}
             onChange={formik.handleChange}
             error={!!formik.errors.name}
             helperText={!!formik.errors.name && formik.errors.name}
             placeholder='Enter name...'
-            { ...props }
+            {...props}
         />
     )
 }
 
-export default ProductNameInput
+export default ProductNameInput;
