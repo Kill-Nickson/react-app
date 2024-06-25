@@ -1,5 +1,5 @@
 /* tslint:disable */
-/* eslint-disable */
+ 
 /**
  * EarthScore B2C API
  * Your description

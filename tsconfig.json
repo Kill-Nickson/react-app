@@ -42,10 +42,13 @@
         "./src/hocs"
       ],
       "@store-services/*": [
-        "./src/app/service/*"
+        "./src/app/services/*"
       ],
       "@store": [
         "./src/app/store.ts"
+      ],
+      "@scripts": [
+        "./src/scripts/*"
       ],
       "@/*": [
         "./src/*"

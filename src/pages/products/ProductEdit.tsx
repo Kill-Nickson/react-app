@@ -22,7 +22,7 @@ const ProductEdit = () => {
     };
   })();
 
-  console.log(res);
+  // console.log(res);
 
   const formik = useFormik({
     initialValues: productInitialValues,

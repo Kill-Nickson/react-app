@@ -6,7 +6,7 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
     'plugin:react-hooks/recommended',
   ],
-  ignorePatterns: ['dist', '.eslintrc.cjs'],
+  ignorePatterns: ['dist', '.eslintrc.cjs', 'src/openapi', 'src/hocs'],
   parser: '@typescript-eslint/parser',
   plugins: ['react-refresh'],
   rules: {
@@ -15,4 +15,12 @@ module.exports = {
       { allowConstantExport: true },
     ],
   },
+  overrides: [
+    {
+      files: ['src/utils/validators/*Schema.{js,jsx,ts,tsx}'],
+      rules: {
+        'react-refresh/only-export-components': 'off',
+      },
+    },
+  ],
 }

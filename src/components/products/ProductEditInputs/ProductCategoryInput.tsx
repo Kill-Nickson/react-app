@@ -5,7 +5,7 @@ import { FormikProps } from "formik";
 
 interface Props extends StandardTextFieldProps {
     formik: FormikProps<ProductFormValues>;
-};
+}
 
 
 const ProductCategoryInput = ( { formik, ...props }: Props ) => {
