@@ -13,7 +13,6 @@ import routes from "@/routes";
 import ROUTE from "@utils/enums";
 import { persistor, store } from "@store";
 import { refreshAccess } from "@store-services/auth/authSlice";
-import AxiosCacheAdapter from 'axios-cache-adapter';
 import { setupCache } from 'axios-cache-interceptor';
 // import i18n from "@/common/translation";
 
@@ -41,13 +40,13 @@ class ExtendedAxiosError<T = unknown, D = any> extends AxiosError<T, D> {
  * Helps to initialize axios interceptors, headers and offers generic functions for query, get, post, put and delete axios calls
  */
 
-const api = axios;
+// const api = axios;
 
-// const api = setupCache(axios, {
-//     ttl: 5 * 60 * 1000, // 5 minutes
-//     cachePredicate: { statusCheck: (status) => [200].includes(status) },
-//     cacheTakeover: false
-// });
+const api = setupCache(axios, {
+    ttl: 5 * 60 * 1000, // 5 minutes
+    cachePredicate: { statusCheck: (status) => [200].includes(status) },
+    cacheTakeover: false
+});
 
 const ApiService = {
     /**
@@ -86,14 +85,10 @@ const ApiService = {
         } else if (error.response?.status === 401) {
             if (error.config && !error.config._isRetry) {
                 error.config._isRetry = true;
-                // const { access, refresh } = await store.dispatch(refreshAccess()).unwrap()
-                const tokens = await store.dispatch(refreshAccess()).unwrap()
-                const refreshToken = tokens.refresh;
-
-                // if (refresh) {
-                if (refreshToken) {
-                    // error.config.headers['Authorization'] = `Bearer ${access}`;
-                    error.config.headers['Authorization'] = `Bearer ${tokens.access}`;
+                const { access, refresh } = await store.dispatch(refreshAccess()).unwrap()
+                
+                if (refresh) {
+                    error.config.headers['Authorization'] = `Bearer ${access}`;
                     api(error.config);
                 } else {
                     persistor.purge();

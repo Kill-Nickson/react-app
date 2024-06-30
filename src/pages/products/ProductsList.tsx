@@ -42,19 +42,19 @@ const ProductsList = () => {
         setErrorRes(prevState => ({ ...prevState, waiting: true }));
 
         dispatch(productsList({}))
-            .unwrap()
-            .catch(({ detail }) => {
-                console.log(detail);
-                setErrorRes(prevState => ({ ...prevState, errorText: detail }));
-            })
-            .finally(() => {
-                setErrorRes(prevState => ({ ...prevState, waiting: false }));
-            });
+                .unwrap()
+                .catch(({ detail }) => {
+                    setErrorRes(prevState => ({ ...prevState, errorText: detail }));
+                })
+                .finally(() => {
+                    setErrorRes(prevState => ({ ...prevState, waiting: false }));
+                });
     }, []);
 
     return (
         <div style={{ height: 400, width: '100%' }}>
             <h1>ProductsList</h1>
+            <h2>Status: {status}</h2>
             <DataGrid
                 rows={products}
                 columns={columns}
