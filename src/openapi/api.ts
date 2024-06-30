@@ -640,6 +640,37 @@ export interface PackagingMetrics {
 /**
  * 
  * @export
+ * @interface PaginatedProduct
+ */
+export interface PaginatedProduct {
+    /**
+     * 
+     * @type {number}
+     * @memberof PaginatedProduct
+     */
+    'count': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof PaginatedProduct
+     */
+    'next': string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof PaginatedProduct
+     */
+    'previous': string | null;
+    /**
+     * 
+     * @type {Array<Product>}
+     * @memberof PaginatedProduct
+     */
+    'results': Array<Product>;
+}
+/**
+ * 
+ * @export
  * @interface PasswordToken
  */
 export interface PasswordToken {
@@ -5802,7 +5833,7 @@ export const ProductsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async productsList(search?: string, ordering?: string, page?: number, perPage?: number, onlyUserProducts?: boolean, scanningTimeLt?: any, authored?: boolean, verified?: boolean, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Product>>> {
+        async productsList(search?: string, ordering?: string, page?: number, perPage?: number, onlyUserProducts?: boolean, scanningTimeLt?: any, authored?: boolean, verified?: boolean, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginatedProduct>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.productsList(search, ordering, page, perPage, onlyUserProducts, scanningTimeLt, authored, verified, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -5898,7 +5929,7 @@ export const ProductsApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        productsList(requestParameters: ProductsApiProductsListRequest = {}, options?: AxiosRequestConfig): AxiosPromise<Array<Product>> {
+        productsList(requestParameters: ProductsApiProductsListRequest = {}, options?: AxiosRequestConfig): AxiosPromise<PaginatedProduct> {
             return localVarFp.productsList(requestParameters.search, requestParameters.ordering, requestParameters.page, requestParameters.perPage, requestParameters.onlyUserProducts, requestParameters.scanningTimeLt, requestParameters.authored, requestParameters.verified, options).then((request) => request(axios, basePath));
         },
         /**

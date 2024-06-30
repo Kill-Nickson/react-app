@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosRequestConfig } from "axios";
+import axios, { AxiosError, AxiosRequestConfig, InternalAxiosRequestConfig, AxiosResponse } from "axios";
 // import router from "../router";
 // import { version } from "@/../release";
 // import { useHelpersStore } from "../store/common/helpers/helpers_store";
@@ -6,64 +6,99 @@ import axios, { AxiosError, AxiosRequestConfig } from "axios";
 // import { showToastMessage, updateLoadingId } from "../common/storeHelper";
 import {
     AccountsApiFactory,
+    ProductsApiFactory,
 } from "@/openapi";
 import qs from "qs";
 import routes from "@/routes";
 import ROUTE from "@utils/enums";
+import { persistor, store } from "@store";
+import { refreshAccess } from "@store-services/auth/authSlice";
+import AxiosCacheAdapter from 'axios-cache-adapter';
+import { setupCache } from 'axios-cache-interceptor';
 // import i18n from "@/common/translation";
+
+interface ExtendedAxiosRequestConfig<D = any> extends InternalAxiosRequestConfig<D> {
+    _isRetry?: boolean;
+}
+
+// Extend AxiosError to use the extended configuration
+class ExtendedAxiosError<T = unknown, D = any> extends AxiosError<T, D> {
+    constructor(
+        message?: string,
+        code?: string,
+        config?: ExtendedAxiosRequestConfig<D>,
+        request?: any,
+        response?: AxiosResponse<T, D>
+    ) {
+        super(message, code, config, request, response);
+    }
+
+    declare config?: ExtendedAxiosRequestConfig<D>;
+}
 
 /**
  * Abstraction layer for api calls
  * Helps to initialize axios interceptors, headers and offers generic functions for query, get, post, put and delete axios calls
  */
+
+const api = axios;
+
+// const api = setupCache(axios, {
+//     ttl: 5 * 60 * 1000, // 5 minutes
+//     cachePredicate: { statusCheck: (status) => [200].includes(status) },
+//     cacheTakeover: false
+// });
+
 const ApiService = {
     /**
      * Sets axios default URL and default headers & interceptors
      */
     init() {
-        axios.defaults.baseURL = import.meta.env.VITE_APP_API_URL;
-        // this.setHeader();
-        axios.interceptors.response.use(
+        api.defaults.baseURL = import.meta.env.VITE_APP_API_URL;
+        api.interceptors.request.use(
+            (config) => {
+                const state = store.getState().persistedReducer;
+                const token = state.auth.access_token;
+
+                if (token) {
+                    config.headers['Authorization'] = `Bearer ${token}`;
+                }
+                return config;
+            },
+            (error) => {
+                return Promise.reject(error);
+            }
+        );
+
+        api.interceptors.response.use(
             (response) => response,
-            (error) => this.errorHandler(error)
+            (error) => {this.errorHandler(error)}
         );
     },
-
-    // /**
-    //  * Sets default axios headers
-    //  */
-    // setHeader() {
-    //     axios.defaults.withCredentials = true;
-    //     axios.defaults.headers = {
-    //         "Accept": "application/json",
-    //         "Content-Type": "application/json",
-    //         "X-CSRFToken": getCookie("csrftoken"),
-    //     };
-    // },
-
-    // /**
-    //  * Sets Axios default headers with new token
-    //  * @param { string } token - new xcsrf token
-    //  */
-    // setCsrfHeader(token: string | null) {
-    //     axios.defaults.headers = {
-    //         "Accept": "application/json",
-    //         "Content-Type": "application/json",
-    //         "X-CSRFToken": token,
-    //     };
-    // },
 
     /**
      * Defines how different errors are generally handled
      * @param { * } error
      */
-    errorHandler(error: AxiosError) {
+    async errorHandler(error: ExtendedAxiosError) {
         if (error.response?.status == 400) {
 
-        } else if (error.response?.status == 401) {
-            // console.log('Received status 401');
-            // routes.navigate(ROUTE.AUTH_LOGIN);
-            // router.push("/login");
+        } else if (error.response?.status === 401) {
+            if (error.config && !error.config._isRetry) {
+                error.config._isRetry = true;
+                // const { access, refresh } = await store.dispatch(refreshAccess()).unwrap()
+                const tokens = await store.dispatch(refreshAccess()).unwrap()
+                const refreshToken = tokens.refresh;
+
+                // if (refresh) {
+                if (refreshToken) {
+                    // error.config.headers['Authorization'] = `Bearer ${access}`;
+                    error.config.headers['Authorization'] = `Bearer ${tokens.access}`;
+                    api(error.config);
+                } else {
+                    persistor.purge();
+                }
+            }
         } else if (error.response?.status == 403) {
             console.log('Received status 403');
             // showToastMessage(
@@ -105,7 +140,7 @@ const ApiService = {
     },
 
     async query(resource: string, params: any) {
-        return axios
+        return api
             .get(resource + "/", {
                 ...params,
                 paramsSerializer: (serializedParams) => {
@@ -122,13 +157,13 @@ const ApiService = {
 
     async get(resource: string, slug = "") {
         slug = slug ? slug + "/" : "";
-        return axios.get(`${resource}/${slug}`).catch((error) => {
+        return api.get(`${resource}/${slug}`).catch((error) => {
             return error;
         });
     },
 
     async post(resource: string, params: any, config: AxiosRequestConfig = {}) {
-        return axios
+        return api
             .post(`${resource}/`, params, config)
             .then((response) => {
                 return response;
@@ -145,7 +180,7 @@ const ApiService = {
         config: AxiosRequestConfig
     ) {
         const slugString = slug != null ? `${slug}/` : "";
-        return axios
+        return api
             .put(`${resource}/${slugString}`, params, config)
             .then((response) => {
                 return response;
@@ -156,7 +191,7 @@ const ApiService = {
     },
 
     async delete(resource: string, params: any = {}) {
-        return axios.delete(resource + "/", params).catch((error) => {
+        return api.delete(resource + "/", params).catch((error) => {
             return error;
         });
     },
@@ -178,6 +213,23 @@ const ApiService = {
     accounts() {
         return AccountsApiFactory();
     },
+
+    products() {
+        return ProductsApiFactory();
+    },
+
+    // clearCache() {
+    //     cache.store.clear();
+    // },
+
+    // invalidateCache(url: string) {
+    //     const cacheKey = cache.adapter.getCacheKey({
+    //         method: 'get',
+    //         url: url,
+    //     });
+    //     cache.store.removeItem(cacheKey);
+    // }
+
 };
 
 export default ApiService;

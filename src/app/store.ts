@@ -4,9 +4,11 @@ import persistReducer from 'redux-persist/es/persistReducer';
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { persistStore, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
 import authReducer, { authInitialState } from '@store-services/auth/authSlice';
+import productsReducer from '@store-services/products/productsSlice';
 
 const rootReducer = combineReducers({
   auth: authReducer,
+  products: productsReducer,
 });
 
 // const cryptoKey = import.meta.env.VITE_CRYPTO_KEY;
