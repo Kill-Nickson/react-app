@@ -1,3 +1,6 @@
+Guide on codegen:
+https://medium.com/@padovanitr/how-to-setup-rtk-query-and-openapi-16816e9e7098
+
 # react-app
 # React + TypeScript + Vite
 
