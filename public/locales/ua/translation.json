@@ -1,0 +1,64 @@
+{
+    "__LANG__": "UA",
+    "header": {
+        "logout": "Вийти"
+    },
+    "sideBar": {
+        "home": "Головна",
+        "products": "Продукти",
+        "about": "Про нас",
+        "support": "Підтримка"
+    },
+    "footer": {
+        "all_rights_reserved": "Усі права захищені."
+    },
+    "auth": {
+        "login": {
+            "login_header": "Логін",
+            "login": "Увійти",
+            "enter_creds": "Будь ласка, введіть свої дані для входу.",
+            "email": "Електронна пошта",
+            "password": "Пароль",
+            "dont_have_acc": "Не маєте облікового запису?",
+            "register_here": "Зареєструйтесь тут"
+        },
+        "register": {
+            "register_header": "Реєстрація",
+            "register": "Зареєструватися",
+            "email": "Електронна пошта",
+            "first_name": "Ім'я",
+            "last_name": "Прізвище",
+            "password": "Пароль",
+            "password_confirmation": "Підтвердження пароля",
+            "already_have_acc": "Вже маєте обліковий запис?",
+            "login_here": "Увійдіть тут"
+        }
+    },
+    "home_page": "Домашня сторінка",
+    "products": {
+        "products_list": {
+            "products_list": "Список продуктів",
+            "create": "Створити",
+            "edit": "Редагувати",
+            "name": "Назва",
+            "category": "Категорія",
+            "quantity": "Кількість",
+            "score": "Показник",
+            "actions": "Дії"
+        },
+        "products_edit": {
+            "product_edit": "Редагування продукту",
+            "name": "Назва",
+            "quantity": "Кількість",
+            "category": "Категорія",
+            "barcode": "Баркод",
+            "description": "Опис",
+            "ingredients": "Інгрідієнти",
+            "update": "Оновити"
+        },
+        "products_create": {
+            "product_create": "Створення продукту",
+            "create": "Створити"
+        }
+    }
+}

@@ -14,10 +14,12 @@ import AuthSubmitButton from "@components/auth/AuthSubmitButton";
 import LoginFormHeader from "@components/auth/LoginHeader";
 import AuthInputErrorArea from "@components/auth/AuthInputErrorArea";
 import TextFollowedByLink from "@components/auth/TextFollowedByLink";
+import { useTranslation } from "react-i18next";
 
 const AuthLogin = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
+    const { t } = useTranslation();
 
     const [errorRes, setErrorRes] = useState({ errorText: '', waiting: false })
 
@@ -56,12 +58,12 @@ const AuthLogin = () => {
                 <CardFooter className="flex justify-center items-center">
                     {errorRes.waiting
                         ? <CircularProgress />
-                        : <AuthSubmitButton text={'Login'} />
+                        : <AuthSubmitButton text={ t('auth.login.login') } />
                     }
                 </CardFooter>
                 <TextFollowedByLink
-                    text={"Don't have an account?"}
-                    linkText={"Register here"}
+                    text={ t('auth.login.dont_have_acc') }
+                    linkText={ t('auth.login.register_here') }
                     route={ROUTE.AUTH_REGISTER}
                 />
             </Card>

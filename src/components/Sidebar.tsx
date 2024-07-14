@@ -4,6 +4,7 @@ import InfoRoundedIcon from '@mui/icons-material/InfoRounded';
 import ContactSupportRoundedIcon from '@mui/icons-material/ContactSupportRounded';
 import AppsRoundedIcon from '@mui/icons-material/AppsRounded';
 import ROUTE from "@utils/enums";
+import { useTranslation } from "react-i18next";
 
 type Props = {
   isOpen: boolean;
@@ -11,13 +12,15 @@ type Props = {
 };
 
 const Sidebar = ({ isOpen, drawerWidth }: Props) => {
+  const { t } = useTranslation();
+
   const sidebarClasses = `w-1/5 transition-all bg-gray-700 text-white h-full fixed top-0 left-0 transform relative z-100 ${isOpen ? 'translate-x-0 duration-700' : '-translate-x-full duration-300'}`;
 
   const navItems = [
-    { text: 'Home', Icon: HomeRoundedIcon },
-    { text: 'Products', Icon: AppsRoundedIcon, route: ROUTE.PRODUCTS_LIST },
-    { text: 'About', Icon: InfoRoundedIcon },
-    { text: 'Support', Icon: ContactSupportRoundedIcon },
+    { text: t('sideBar.home'), Icon: HomeRoundedIcon },
+    { text: t('sideBar.products'), Icon: AppsRoundedIcon, route: ROUTE.PRODUCTS_LIST },
+    { text: t('sideBar.about'), Icon: InfoRoundedIcon },
+    { text: t('sideBar.support'), Icon: ContactSupportRoundedIcon },
   ]
 
   return (

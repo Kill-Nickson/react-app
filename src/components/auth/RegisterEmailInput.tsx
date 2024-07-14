@@ -3,17 +3,20 @@ import { RegisterFormValues } from "@utils/validators/RegisterSchema";
 import { FormikProps } from "formik";
 import AuthInputErrorArea from "./AuthInputErrorArea";
 import LabeledInput from "./LabeledInput";
+import { useTranslation } from "react-i18next";
 
 interface Props extends StandardTextFieldProps {
     formik: FormikProps<RegisterFormValues>;
 }
 
 const RegisterEmailInput = ({ formik }: Props) => {
+    const { t } = useTranslation(); 
+
     return (
         <div className="space-y-1">
             <LabeledInput
                 htmlFor={'email'}
-                labelText={'Email'}
+                labelText={ t('auth.register.email') }
                 inputId={'email'}
                 inputName={'email'}
                 inputType={'email'}

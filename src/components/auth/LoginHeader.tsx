@@ -1,8 +1,12 @@
+import { useTranslation } from "react-i18next"
+
 const LoginFormHeader = () => {
+    const { t } = useTranslation(); 
+
     return (
         <>
-            <h2 className="text-3xl text-center font-semibold">Login</h2>
-            <h5 className="text-center">Please enter your credentials to proceed.</h5>
+            <h2 className="text-3xl text-center font-semibold">{ t('auth.login.login_header') }</h2>
+            <h5 className="text-center">{ t('auth.login.enter_creds') }</h5>
         </>
     )
 }

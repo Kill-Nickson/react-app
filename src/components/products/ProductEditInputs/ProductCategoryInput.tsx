@@ -3,6 +3,7 @@ import CustomSelect from "@components/base/CustomSelect";
 import { MenuItem, OutlinedSelectProps } from "@mui/material";
 import { ProductFormValues } from "@utils/validators/ProductSchema";
 import { FormikProps } from "formik";
+import { useTranslation } from "react-i18next";
 
 interface Props extends OutlinedSelectProps {
     formik: FormikProps<ProductFormValues>;
@@ -10,10 +11,12 @@ interface Props extends OutlinedSelectProps {
 
 
 const ProductCategoryInput = ({ formik, margin, ...props }: Props) => {
+    const { t } = useTranslation();
+
     return (
         <CustomSelect
             name='category'
-            label={'Category'}
+            label={ t('products.products_edit.category') }
             value={ formik.values.category }
             onChange={formik.handleChange}
             error={!!formik.errors.category}
