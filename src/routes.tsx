@@ -1,12 +1,8 @@
 import { createBrowserRouter } from "react-router-dom";
-import HomePage from "./pages/HomePage";
-import NotFound from "./pages/NotFound";
 import { ROUTE } from "@utils/enums";
-import ProductEdit from "./pages/products/ProductEdit";
-import ProductsList from "./pages/products/ProductsList";
-import { ProtectedAuthLayout, ProtectedMainLayout } from "@pages";
-import AuthLogin from "./pages/auth/AuthLogin";
-import AuthRegister from "./pages/auth/AuthRegister";
+import { AuthLogin, AuthRegister } from "@/pages/auth";
+import { ProductCreate, ProductEdit, ProductsList } from "@/pages/products";
+import { ProtectedAuthLayout, ProtectedMainLayout, HomePage, NotFound } from "@pages";
 
 const routes = createBrowserRouter([
     {
@@ -25,6 +21,10 @@ const routes = createBrowserRouter([
             {
                 path: ROUTE.PRODUCT_EDIT,
                 element: <ProductEdit />
+            },
+            {
+                path: ROUTE.PRODUCT_CREATE,
+                element: <ProductCreate />
             },
         ]
     },

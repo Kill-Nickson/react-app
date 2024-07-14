@@ -1,52 +1,30 @@
-import axios, { AxiosError, AxiosRequestConfig, InternalAxiosRequestConfig, AxiosResponse } from "axios";
-// import router from "../router";
-// import { version } from "@/../release";
-// import { useHelpersStore } from "../store/common/helpers/helpers_store";
-// import { getCookie } from "@/scripts/common";
-// import { showToastMessage, updateLoadingId } from "../common/storeHelper";
-import {
-    AccountsApiFactory,
-    ProductsApiFactory,
-} from "@/openapi";
+import axios, { AxiosRequestConfig } from "axios";
+import { AccountsApiFactory, ProductsApiFactory, } from "@/openapi";
 import qs from "qs";
 import routes from "@/routes";
 import ROUTE from "@utils/enums";
 import { persistor, store } from "@store";
 import { refreshAccess } from "@store-services/auth/authSlice";
 import { setupCache } from 'axios-cache-interceptor';
+import { ExtendedAxiosError, refreshTokenUrl } from "./utils";
 // import i18n from "@/common/translation";
 
-interface ExtendedAxiosRequestConfig<D = any> extends InternalAxiosRequestConfig<D> {
-    _isRetry?: boolean;
-}
-
-// Extend AxiosError to use the extended configuration
-class ExtendedAxiosError<T = unknown, D = any> extends AxiosError<T, D> {
-    constructor(
-        message?: string,
-        code?: string,
-        config?: ExtendedAxiosRequestConfig<D>,
-        request?: any,
-        response?: AxiosResponse<T, D>
-    ) {
-        super(message, code, config, request, response);
-    }
-
-    declare config?: ExtendedAxiosRequestConfig<D>;
-}
+// const api = axios;
+const api = setupCache(axios, {
+    ttl: 5 * 60 * 1000, // 5 minutes
+    cachePredicate: {
+        ignoreUrls: [
+            /.+\/products\/\d+\/?$/,  // prevent caching a product detail page
+        ],
+        statusCheck: (status) => [200].includes(status)
+    },
+    cacheTakeover: false,
+});
 
 /**
  * Abstraction layer for api calls
  * Helps to initialize axios interceptors, headers and offers generic functions for query, get, post, put and delete axios calls
  */
-
-// const api = axios;
-
-const api = setupCache(axios, {
-    ttl: 5 * 60 * 1000, // 5 minutes
-    cachePredicate: { statusCheck: (status) => [200].includes(status) },
-    cacheTakeover: false
-});
 
 const ApiService = {
     /**
@@ -71,7 +49,7 @@ const ApiService = {
 
         api.interceptors.response.use(
             (response) => response,
-            (error) => {this.errorHandler(error)}
+            (error) => this.errorHandler(error)
         );
     },
 
@@ -83,17 +61,23 @@ const ApiService = {
         if (error.response?.status == 400) {
 
         } else if (error.response?.status === 401) {
-            if (error.config && !error.config._isRetry) {
+            if (
+                error.config
+                && !error.config._isRetry
+                && refreshTokenUrl
+                && !error.config.url?.includes(refreshTokenUrl)
+            ) {
                 error.config._isRetry = true;
                 const { access, refresh } = await store.dispatch(refreshAccess()).unwrap()
-                
+
                 if (refresh) {
                     error.config.headers['Authorization'] = `Bearer ${access}`;
-                    api(error.config);
+                    return api(error.config);
                 } else {
                     persistor.purge();
                 }
             }
+
         } else if (error.response?.status == 403) {
             console.log('Received status 403');
             // showToastMessage(
@@ -128,6 +112,9 @@ const ApiService = {
             //     "Internal Server Error!"
             // );
         } else {
+            if (axios.isCancel(error)) {
+                return error;
+            }
             console.log('Unknown Error!');
             // showToastMessage(i18n.global.t("attention"), "Unknown Error!");
         }
@@ -190,20 +177,6 @@ const ApiService = {
             return error;
         });
     },
-    //     return new AuditsApi();
-    // },
-
-    // utils() {
-    //     return UtilsApiFactory();
-    // },
-
-    // notifications() {
-    //     return NotificationsApiFactory();
-    // },
-
-    // incidents() {
-    //     return IncidentsApiFactory();
-    // },
 
     accounts() {
         return AccountsApiFactory();
@@ -212,19 +185,6 @@ const ApiService = {
     products() {
         return ProductsApiFactory();
     },
-
-    // clearCache() {
-    //     cache.store.clear();
-    // },
-
-    // invalidateCache(url: string) {
-    //     const cacheKey = cache.adapter.getCacheKey({
-    //         method: 'get',
-    //         url: url,
-    //     });
-    //     cache.store.removeItem(cacheKey);
-    // }
-
 };
 
 export default ApiService;

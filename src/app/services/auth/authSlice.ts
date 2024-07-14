@@ -26,7 +26,7 @@ export const refreshAccess = createAsyncThunk<TokenWithExpirationResponse, void,
     async (_, thunkApi) => {
         try {
             const state = thunkApi.getState();
-            const refreshToken = state.persistedReducer.auth.refresh_token;
+            const refreshToken = state.persistedReducer.auth.refresh_token || '';
             const response = await ApiService.accounts().accountsRefreshTokenCreate({ data: { refresh: refreshToken } });
             return response.data;
         } catch (error: unknown) {

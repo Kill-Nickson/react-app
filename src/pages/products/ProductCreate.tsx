@@ -1,21 +1,24 @@
 import { useFormik } from "formik";
 import { ProductSchema, productInitialValues } from "@utils/validators/ProductSchema";
 import CustomSnackbar from "@components/base/CustomSnackbar";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import CustomFadeButton from "@components/base/CustomFadeButton";
 import ProductNameInput from "@components/products/ProductEditInputs/ProductNameInput";
 import ProductQuantityInput from "@components/products/ProductEditInputs/ProductQuantityInput";
 import ProductCategoryInput from "@components/products/ProductEditInputs/ProductCategoryInput";
 import ApiService from "@/openapi/apiService";
-import { Params, useParams } from "react-router-dom";
 import { CircularProgress } from "@mui/material";
 import ProductBarcodeInput from "@components/products/ProductEditInputs/ProductBarcodeInput";
 import ProductDescriptionInput from "@components/products/ProductEditInputs/ProductDescriptionInput";
 import ProductIngredientsInput from "@components/products/ProductEditInputs/ProductIngredientsInput";
-import { ProductsApiProductsPartialUpdateRequest } from "@/openapi";
+import { ProductsApiProductsCreateRequest } from "@/openapi";
+import { useNavigate } from "react-router-dom";
+import ROUTE from "@utils/enums";
 
-const ProductEdit = () => {
-  const { id } = useParams<Params>();
+
+const ProductCreate = () => {
+  const navigate = useNavigate();
+
   const [open, setOpen] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [statusMessage, setStatusMessage] = useState<{ message: string; error: boolean }>({
@@ -23,42 +26,19 @@ const ProductEdit = () => {
     error: false,
   });
 
-  useEffect(() => {
-    fetchProductData();
-  }, [])
-
-  const fetchProductData = () => {
-    setIsLoading(true);
-    ApiService.products().productsRead({ id: id! })
-      .then((response) => {
-        const keysToSet = Object.keys(productInitialValues);
-
-        Object.entries(response.data).map(([key, value]) => {
-          if (keysToSet.includes(key)) {
-            formik.setFieldValue(key, value);
-          }
-        });
-      })
-      .finally(() => {
-        setIsLoading(false);
-      })
-  };
-
-  const updateProductData = (values: Omit<ProductsApiProductsPartialUpdateRequest, 'id'>) => {
+  const createProduct = (values: Omit<ProductsApiProductsCreateRequest, 'id'>) => {
     setIsLoading(true);
 
-    const updatedValues = Object.fromEntries(
-      Object.entries(values).filter(([_, value]) => value !== null)
-    )
-    ApiService.products().productsPartialUpdate({ ...updatedValues, id: id! })
+    ApiService.products().productsCreate(values)
+      .catch((error) => {
+        Object.entries(error.response.data).forEach(([errorField, errorMessage]: [string, any]) => {
+          formik.setFieldError(errorField, errorMessage[0]);
+        })
+      })
       .then((response) => {
-        const keysToSet = Object.keys(productInitialValues);
-
-        Object.entries(response.data).map(([key, value]) => {
-          if (keysToSet.includes(key)) {
-            formik.setFieldValue(key, value);
-          }
-        });
+        if (response?.data?.id) {
+          navigate(`${ROUTE.PRODUCT_EDIT.replace(':id', response.data.id.toString())}`);
+        }
       })
       .finally(() => {
         setIsLoading(false);
@@ -68,7 +48,7 @@ const ProductEdit = () => {
   const formik = useFormik({
     initialValues: productInitialValues,
     onSubmit: (values) => {
-      updateProductData(values);
+      createProduct(values);
       setStatusMessage({ message: 'test message', error: false });
       setOpen(true);
     },
@@ -80,7 +60,7 @@ const ProductEdit = () => {
 
   return (
     <div>
-      <h1>ProductEdit</h1>
+      <h1>ProductCreate</h1>
 
       <form
         className='mt-3 ml-4 w-[300px] flex flex-col justify-center items-center'
@@ -88,7 +68,7 @@ const ProductEdit = () => {
       >
         <ProductNameInput formik={formik} margin='normal' />
         <ProductQuantityInput formik={formik} margin='normal' />
-        <ProductCategoryInput formik={formik} margin='dense' />
+        <ProductCategoryInput formik={formik} variant={"outlined"} />
         <ProductBarcodeInput formik={formik} margin='normal' />
         <ProductDescriptionInput formik={formik} margin='normal' />
         <ProductIngredientsInput formik={formik} margin='normal' />
@@ -105,4 +85,4 @@ const ProductEdit = () => {
   )
 }
 
-export default ProductEdit
+export default ProductCreate;

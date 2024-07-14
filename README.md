@@ -1,3 +1,6 @@
+To generate api code run:
+yarn openapi-generator-cli generate
+
 # react-app
 # React + TypeScript + Vite
 

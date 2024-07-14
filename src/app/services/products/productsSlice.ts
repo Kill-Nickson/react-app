@@ -1,20 +1,25 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { DetailResponse, Product, ProductsApiProductsListRequest } from '../../../openapi/api';
+import { DetailResponse, PaginatedProduct, Product, ProductsApiProductsListRequest } from '../../../openapi/api';
 import { AxiosError } from "axios";
 import ApiService from '@/openapi/apiService';
-// import { PURGE } from 'redux-persist';
 
-export const productsList = createAsyncThunk<Array<Product>, ProductsApiProductsListRequest, { rejectValue: DetailResponse }>(
+type ProductsApiProductsListRequestWithSignal = {
+    requestDto: ProductsApiProductsListRequest;
+    signal: AbortSignal;
+}
+
+export const productsList = createAsyncThunk<PaginatedProduct, ProductsApiProductsListRequestWithSignal,{ rejectValue: DetailResponse }>(
     'products/list',
-    async (_, thunkApi) => {
+    async (RequestWithSignalDto, thunkApi) => {
+        const { requestDto, signal } = RequestWithSignalDto;
         try {
-            const response = await ApiService.products().productsList();
-            return response.data.results;
+            const response = await ApiService.products().productsList(requestDto, { signal });
+            return response.data;
         } catch (error: unknown) {
             if (error instanceof AxiosError && error?.response?.data?.detail) {
                 return thunkApi.rejectWithValue(error.response?.data);
             } else {
-                return thunkApi.rejectWithValue({ detail: "Unknown error"});
+                return thunkApi.rejectWithValue({ detail: "Unknown error" });
             }
         }
     }
@@ -22,11 +27,13 @@ export const productsList = createAsyncThunk<Array<Product>, ProductsApiProducts
 
 interface ProductsState {
     products: Array<Product>;
+    count: number;
     status: string;
 }
 
 const initialState: ProductsState = {
     products: [],
+    count: 0,
     status: 'idle',
 };
 
@@ -41,13 +48,12 @@ const productsSlice = createSlice({
             })
             .addCase(productsList.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                console.log('successful payload:', action.payload);
-                state.products = action.payload;
+                state.products = action.payload.results;
+                state.count = action.payload.count;
             })
             .addCase(productsList.rejected, (state) => {
                 state.status = 'failed';
             })
-            // .addCase(PURGE, () => initialState);
     },
 });
 
