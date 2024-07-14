@@ -8,6 +8,8 @@ import MenuIcon from '@mui/icons-material/Menu'
 import { persistor } from '@store';
 import { useNavigate } from 'react-router-dom';
 import ROUTE from '@utils/enums';
+import CustomLanguageSwitcher from '@components/utils/CustomLanguageSwitcher';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   toggleSidebar: () => void;
@@ -15,6 +17,7 @@ type Props = {
 
 const Header = ({ toggleSidebar }: Props) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const handleToggleSidebar = () => {
     toggleSidebar();
@@ -44,7 +47,10 @@ const Header = ({ toggleSidebar }: Props) => {
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               ReactApp
             </Typography>
-            <Button onClick={logout} color="inherit">Logout</Button>
+
+            <CustomLanguageSwitcher className='w-10 h-6 mr-2' />
+
+            <Button onClick={logout} color="inherit">{t('header.logout')}</Button>
           </Toolbar>
         </AppBar>
       </Box>

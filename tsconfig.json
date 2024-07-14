@@ -32,7 +32,7 @@
       "@utils/*": [
         "./src/utils/*"
       ],
-      "@images/*": [
+      "@assets/*": [
         "./src/assets/*"
       ],
       "@hooks": [

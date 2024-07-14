@@ -14,9 +14,12 @@ import ApiService from "@/openapi/apiService";
 import AuthSubmitButton from "@components/auth/AuthSubmitButton";
 import { useState } from "react";
 import TextFollowedByLink from "@components/auth/TextFollowedByLink";
+import { useTranslation } from "react-i18next";
 
 const AuthRegister = () => {
     const navigate = useNavigate();
+    const { t } = useTranslation();
+    
     const [isWaitingRes, setIsWaitingRes] = useState<boolean>(false);
     const handleErrors = (details: { [key: string]: string[] }) => {
         Object.entries(details).forEach(([field, errors]: [string, string[]]) => {
@@ -56,7 +59,7 @@ const AuthRegister = () => {
     return (
         <form onSubmit={formik.handleSubmit}>
             <Card className="max-w-md mx-auto my-3 p-3 bg-white rounded shadow-lg">
-                <h2 className="text-3xl text-center font-semibold">Register</h2>
+                <h2 className="text-3xl text-center font-semibold">{ t('auth.register.register_header') }</h2>
                 <CardContent className="mx-auto space-y-1 ">
                     <RegisterEmailInput formik={formik} />
                     <RegisterFirstNameInput formik={formik} />
@@ -69,12 +72,12 @@ const AuthRegister = () => {
                         ? <div className="flex justify-center items-center">
                             <CircularProgress />
                         </div>
-                        : <AuthSubmitButton text={'Register'} />
+                        : <AuthSubmitButton text={ t('auth.register.register') } />
                     }
                 </CardFooter>
                 <TextFollowedByLink
-                    text={"Already have an account?"}
-                    linkText={"Login here"}
+                    text={ t('auth.register.already_have_acc') }
+                    linkText={ t('auth.register.login_here') }
                     route={ROUTE.AUTH_LOGIN}
                 />
             </Card>

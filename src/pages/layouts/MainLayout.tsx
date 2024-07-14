@@ -7,7 +7,7 @@ import { Outlet } from 'react-router-dom';
 const MainLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
-  const drawerWidth = 160;
+  const drawerWidth = 170;
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);

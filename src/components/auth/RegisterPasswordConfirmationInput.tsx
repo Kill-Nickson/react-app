@@ -3,17 +3,20 @@ import { RegisterFormValues } from "@utils/validators/RegisterSchema";
 import { FormikProps } from "formik";
 import AuthInputErrorArea from "./AuthInputErrorArea";
 import LabeledInput from "./LabeledInput";
+import { useTranslation } from "react-i18next";
 
 interface Props extends StandardTextFieldProps {
     formik: FormikProps<RegisterFormValues>;
 }
 
 const RegisterPasswordConfirmationInput = ({ formik }: Props) => {
+    const { t } = useTranslation(); 
+
     return (
         <div className="space-y-1">
             <LabeledInput
                 htmlFor={'passwordConfirmation'}
-                labelText={'Password Confirmation'}
+                labelText={ t('auth.register.password_confirmation') }
                 inputId={'passwordConfirmation'}
                 inputName={'passwordConfirmation'}
                 inputType={'password'}

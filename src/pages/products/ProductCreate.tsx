@@ -14,11 +14,12 @@ import ProductIngredientsInput from "@components/products/ProductEditInputs/Prod
 import { ProductsApiProductsCreateRequest } from "@/openapi";
 import { useNavigate } from "react-router-dom";
 import ROUTE from "@utils/enums";
+import { useTranslation } from "react-i18next";
 
 
 const ProductCreate = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
-
   const [open, setOpen] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [statusMessage, setStatusMessage] = useState<{ message: string; error: boolean }>({
@@ -60,7 +61,7 @@ const ProductCreate = () => {
 
   return (
     <div>
-      <h1>ProductCreate</h1>
+      <h1>{ t('products.products_create.product_create') }</h1>
 
       <form
         className='mt-3 ml-4 w-[300px] flex flex-col justify-center items-center'
@@ -73,7 +74,7 @@ const ProductCreate = () => {
         <ProductDescriptionInput formik={formik} margin='normal' />
         <ProductIngredientsInput formik={formik} margin='normal' />
 
-        <CustomFadeButton className='mt-10' type='submit' children='Update' />
+        <CustomFadeButton className='mt-10' type='submit' children={ t('products.products_create.create') } />
         <CustomSnackbar open={open} onClose={setOpen} message={statusMessage.message} severity={statusMessage.error ? 'error' : 'success'} />
       </form>
       {isLoading && (

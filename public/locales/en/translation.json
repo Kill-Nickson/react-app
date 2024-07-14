@@ -1,0 +1,64 @@
+{
+    "__LANG__": "EN",
+    "header": {
+        "logout": "Logout"
+    },
+    "sideBar": {
+        "home": "Home",
+        "products": "Products",
+        "about": "About",
+        "support": "Support"
+    },
+    "footer": {
+        "all_rights_reserved": "All rights reserved."
+    },
+    "auth": {
+        "login": {
+            "login_header": "Login",
+            "login": "Login",
+            "enter_creds": "Please enter your credentials to proceed.",
+            "email": "Email",
+            "password": "Password",
+            "dont_have_acc": "Don't have an account?",
+            "register_here": "Register here"
+        },
+        "register": {
+            "register_header": "Registration",
+            "register": "Register",
+            "email": "Email",
+            "first_name": "First Name",
+            "last_name": "Last Name",
+            "password": "Password",
+            "password_confirmation": "Password Confirmation",
+            "already_have_acc": "Already have an account?",
+            "login_here": "Login here"
+        }
+    },
+    "home_page": "Home Page",
+    "products": {
+        "products_list": {
+            "products_list": "Products List",
+            "create": "Create",
+            "edit": "Edit",
+            "name": "Name",
+            "category": "Category",
+            "quantity": "Quantity",
+            "score": "Score",
+            "actions": "Actions"
+        },
+        "products_edit": {
+            "product_edit": "Edit Product",
+            "name": "Name",
+            "quantity": "Quantity",
+            "category": "Category",
+            "barcode": "Barcode",
+            "description": "Description",
+            "ingredients": "Ingredients",
+            "update": "Update"
+        },
+        "products_create": {
+            "product_create": "Create Product",
+            "create": "Create"
+        }
+    }
+}

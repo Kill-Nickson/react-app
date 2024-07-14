@@ -13,8 +13,10 @@ import ProductBarcodeInput from "@components/products/ProductEditInputs/ProductB
 import ProductDescriptionInput from "@components/products/ProductEditInputs/ProductDescriptionInput";
 import ProductIngredientsInput from "@components/products/ProductEditInputs/ProductIngredientsInput";
 import { ProductsApiProductsPartialUpdateRequest } from "@/openapi";
+import { useTranslation } from "react-i18next";
 
 const ProductEdit = () => {
+  const { t } = useTranslation();
   const { id } = useParams<Params>();
   const [open, setOpen] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -80,7 +82,7 @@ const ProductEdit = () => {
 
   return (
     <div>
-      <h1>ProductEdit</h1>
+      <h1>{ t('products.products_edit.product_edit') }</h1>
 
       <form
         className='mt-3 ml-4 w-[300px] flex flex-col justify-center items-center'
@@ -93,7 +95,7 @@ const ProductEdit = () => {
         <ProductDescriptionInput formik={formik} margin='normal' />
         <ProductIngredientsInput formik={formik} margin='normal' />
 
-        <CustomFadeButton className='mt-10' type='submit' children='Update' />
+        <CustomFadeButton className='mt-10' type='submit' children={ t('products.products_edit.update') } />
         <CustomSnackbar open={open} onClose={setOpen} message={statusMessage.message} severity={statusMessage.error ? 'error' : 'success'} />
       </form>
       {isLoading && (
