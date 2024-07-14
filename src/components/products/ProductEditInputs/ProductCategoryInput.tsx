@@ -1,25 +1,31 @@
-import CustomTextField from "@components/base/CustomTextField"
-import { StandardTextFieldProps } from "@mui/material";
+import { ProductRetrieveCategoryEnum } from "@/openapi";
+import CustomSelect from "@components/base/CustomSelect";
+import { MenuItem, OutlinedSelectProps } from "@mui/material";
 import { ProductFormValues } from "@utils/validators/ProductSchema";
 import { FormikProps } from "formik";
 
-interface Props extends StandardTextFieldProps {
+interface Props extends OutlinedSelectProps {
     formik: FormikProps<ProductFormValues>;
 }
 
 
-const ProductCategoryInput = ( { formik, ...props }: Props ) => {
+const ProductCategoryInput = ({ formik, margin, ...props }: Props) => {
     return (
-        <CustomTextField
+        <CustomSelect
             name='category'
             label={'Category'}
             value={ formik.values.category }
             onChange={formik.handleChange}
             error={!!formik.errors.category}
-            helperText={!!formik.errors.category && formik.errors.category}
-            placeholder='Enter category...'
-            { ...props }
-        />
+            placeholder='Select category...'
+            {...props}
+        >
+            {Object.entries(ProductRetrieveCategoryEnum).map(([value, option]) => (
+                <MenuItem value={option} key={option}>
+                    {value}
+                </MenuItem>
+            ))}
+        </CustomSelect>
     )
 }
 

@@ -7,12 +7,11 @@ import ROUTE from "@utils/enums";
 
 type Props = {
   isOpen: boolean;
+  drawerWidth: number;
 };
 
-const drawerWidth = 160;
-
-const Sidebar = ({ isOpen }: Props) => {
-  const sidebarClasses = `transition-all duration-300 ease-in-out bg-gray-700 text-white h-full fixed top-0 left-0 transform relative ${isOpen ? 'translate-x-0' : '-translate-x-full'}`;
+const Sidebar = ({ isOpen, drawerWidth }: Props) => {
+  const sidebarClasses = `w-1/5 transition-all bg-gray-700 text-white h-full fixed top-0 left-0 transform relative z-100 ${isOpen ? 'translate-x-0 duration-700' : '-translate-x-full duration-300'}`;
 
   const navItems = [
     { text: 'Home', Icon: HomeRoundedIcon },

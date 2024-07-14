@@ -24,3 +24,6 @@ dist-ssr
 *.sw?
 
 .env
+src/openapi/
+!src/openapi/apiService.ts
+!src/openapi/base.ts
