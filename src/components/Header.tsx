@@ -8,7 +8,7 @@ import MenuIcon from '@mui/icons-material/Menu'
 import { persistor } from '@store';
 import { useNavigate } from 'react-router-dom';
 import ROUTE from '@utils/enums';
-import CustomLanguageSwitcher from '@components/utils/CustomLanguageSwitcher';
+import LanguageSwitcher from '@components/utils/LanguageSwitcher';
 import { useTranslation } from 'react-i18next';
 
 type Props = {
@@ -48,7 +48,7 @@ const Header = ({ toggleSidebar }: Props) => {
               ReactApp
             </Typography>
 
-            <CustomLanguageSwitcher className='w-10 h-6 mr-2' />
+            <LanguageSwitcher className='w-10 h-6 mr-2' />
 
             <Button onClick={logout} color="inherit">{t('header.logout')}</Button>
           </Toolbar>

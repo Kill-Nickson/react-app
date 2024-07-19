@@ -1,4 +1,4 @@
-import CustomLanguageSwitcher from '@components/utils/CustomLanguageSwitcher';
+import LanguageSwitcher from '@components/utils/LanguageSwitcher';
 import { Outlet } from 'react-router-dom';
 
 const AuthLayout = () => {
@@ -6,7 +6,7 @@ const AuthLayout = () => {
     <>
       <div className='relative w-full'>
         <div className='absolute top-0 right-0'>
-          <CustomLanguageSwitcher className='mt-5 mr-10' />
+          <LanguageSwitcher className='mt-5 mr-10' />
         </div>
       </div>
       <div className="flex flex-col min-h-screen max-w-screen">
