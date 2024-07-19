@@ -16,11 +16,20 @@ const Sidebar = ({ isOpen, drawerWidth }: Props) => {
 
   const sidebarClasses = `w-1/5 transition-all bg-gray-700 text-white h-full fixed top-0 left-0 transform relative z-100 ${isOpen ? 'translate-x-0 duration-700' : '-translate-x-full duration-300'}`;
 
+  type Content = {
+    home: string;
+    products: string;
+    about: string;
+    support: string;
+  }
+  
+  const translateContent: Content = t("sideBar", { returnObjects: true })
+  
   const navItems = [
-    { text: t('sideBar.home'), Icon: HomeRoundedIcon },
-    { text: t('sideBar.products'), Icon: AppsRoundedIcon, route: ROUTE.PRODUCTS_LIST },
-    { text: t('sideBar.about'), Icon: InfoRoundedIcon },
-    { text: t('sideBar.support'), Icon: ContactSupportRoundedIcon },
+    { text: translateContent.home, Icon: HomeRoundedIcon },
+    { text: translateContent.products, Icon: AppsRoundedIcon, route: ROUTE.PRODUCTS_LIST },
+    { text: translateContent.about, Icon: InfoRoundedIcon },
+    { text: translateContent.support, Icon: ContactSupportRoundedIcon },
   ]
 
   return (

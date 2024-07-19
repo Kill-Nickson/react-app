@@ -1,13 +1,14 @@
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import Header from "@components/Header";
 import Footer from "@components/Footer";
 import Sidebar from '@components/Sidebar';
 import { Outlet } from 'react-router-dom';
+import { CircularProgress } from '@mui/material';
 
 const MainLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
-  const drawerWidth = 170;
+  const drawerWidth = 220;
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -21,7 +22,9 @@ const MainLayout = () => {
           className={'p-4 relative'}
           style={{ width: isSidebarOpen ? `calc(100% - ${drawerWidth}px)` : '100%' }}
         >
-          <Outlet />
+          <Suspense fallback={<CircularProgress />}>
+            <Outlet />
+          </Suspense>
         </div>
       </main>
       <Footer />

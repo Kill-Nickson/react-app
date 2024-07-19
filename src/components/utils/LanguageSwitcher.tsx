@@ -14,7 +14,7 @@ const optionsFlag = [
   { lang: 'en', icon: gbFlag },
 ];
 
-const CustomLanguageSwitcher = ({ className }: Props) => {
+const LanguageSwitcher = ({ className }: Props) => {
   const [selectedLang, setSelectedLang] = useState(i18n.language.slice(0, 2));
 
   useEffect(() => {
@@ -86,4 +86,4 @@ const CustomLanguageSwitcher = ({ className }: Props) => {
   );
 };
 
-export default CustomLanguageSwitcher;
+export default LanguageSwitcher;
